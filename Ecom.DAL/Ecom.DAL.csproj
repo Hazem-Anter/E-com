@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Configuration\" />
-    <Folder Include="Entity\" />
     <Folder Include="Enum\" />
     <Folder Include="Repo\Abstraction\" />
     <Folder Include="Repo\Implementation\" />

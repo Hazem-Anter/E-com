@@ -27,6 +27,19 @@ namespace Ecom.PL
             builder.Services.AddBusinessInDAL();
             builder.Services.AddBusinessInBLL();
 
+            // Add CORS Policy
+            var allowedOrigins = builder.Configuration.GetValue<string>("AllowedOrigins")!.Split(",");
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials()
+                            .WithOrigins(allowedOrigins);
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -37,6 +50,9 @@ namespace Ecom.PL
             }
 
             app.UseHttpsRedirection();
+
+            // Use CORS Middleware
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

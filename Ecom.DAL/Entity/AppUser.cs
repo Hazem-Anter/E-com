@@ -15,7 +15,12 @@ namespace Ecom.DAL.Entity
         public string? UpdatedBy { get; private set; }
         public bool IsDeleted { get; private set; }
 
+        // Forieng Keys
+        public int CartId { get; private set; }
+
         // Navigation Properties
+        public virtual Cart Cart { get; private set; }
+        public virtual ICollection<Order>? Orders { get; private set; }
         public virtual ICollection<Address>? Addresses { get; private set; }
         public virtual ICollection<ProductReview>? ProductReviews { get; private set; }
         public virtual ICollection<WishlistItem>? WishlistItems { get; private set; }

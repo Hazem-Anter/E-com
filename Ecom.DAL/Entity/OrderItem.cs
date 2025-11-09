@@ -1,10 +1,13 @@
 ﻿
 namespace Ecom.DAL.Entity
 {
-    public class WishlistItem
+    public class OrderItem
     {
         [Key]
         public int Id { get; private set; }
+        public int Quantity { get; private set; }
+        public decimal UnitPrice { get; private set; }
+        public decimal TotalPrice { get; private set; }
         public string? CreatedBy { get; private set; }
         public DateTime CreatedOn { get; private set; }
         public DateTime? DeletedOn { get; private set; }
@@ -13,36 +16,43 @@ namespace Ecom.DAL.Entity
         public string? UpdatedBy { get; private set; }
         public bool IsDeleted { get; private set; }
 
-        // Foriegn Keys
-        [ForeignKey("AppUser")]
-        public string? AppUserId { get; private set; }
+        // Foreign Keys
+        [ForeignKey("Order")]
+        public int OrderId { get; private set; }
 
         [ForeignKey("Product")]
         public int ProductId { get; private set; }
 
         // Navigation Properties
-        public virtual AppUser? AppUser { get; private set; }
+        public virtual Order? Order { get; private set; }
         public virtual Product? Product { get; private set; }
 
         // Logic
-        public WishlistItem() { }
-        public WishlistItem(string appUserId, int productId, string createdBy)
+        public OrderItem() { }
+
+        public OrderItem(int productId, int orderId, int quantity, decimal unitPrice, string createdBy)
         {
-            AppUserId = appUserId;
             ProductId = productId;
-            CreatedBy = createdBy;
+            OrderId = orderId;
+            Quantity = quantity;
+            UnitPrice = unitPrice;
             CreatedOn = DateTime.UtcNow;
+            CreatedBy = createdBy;
             IsDeleted = false;
+            TotalPrice = UnitPrice * Quantity;
         }
 
-        public bool Update(string appUserId, int productId, string userModified)
+        public bool Update(int productId, int orderId, int quantity, decimal unitPrice, string userModified)
         {
             if (!string.IsNullOrEmpty(userModified))
             {
-                AppUserId = appUserId;
                 ProductId = productId;
+                OrderId = orderId;
+                Quantity = quantity;
+                UnitPrice = unitPrice;
                 UpdatedOn = DateTime.UtcNow;
                 UpdatedBy = userModified;
+                TotalPrice = UnitPrice * Quantity;
                 return true;
             }
             return false;

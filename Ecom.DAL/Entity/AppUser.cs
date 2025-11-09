@@ -6,6 +6,7 @@ namespace Ecom.DAL.Entity
         // IdentityUser provide: Email, Password, PhoneNumber, Role management
         public string? DisplayName { get; private set; }
         public string? ProfileImageUrl { get; private set; }
+        public bool IsActive { get; private set; } // The user state wether active or locked-out
         public string? CreatedBy { get; private set; }
         public DateTime CreatedOn { get; private set; }
         public DateTime? DeletedOn { get; private set; }
@@ -14,21 +15,33 @@ namespace Ecom.DAL.Entity
         public string? UpdatedBy { get; private set; }
         public bool IsDeleted { get; private set; }
 
+        // Forieng Keys
+        public int CartId { get; private set; }
+
         // Navigation Properties
+        public virtual Cart Cart { get; private set; }
+        public virtual ICollection<Order>? Orders { get; private set; }
         public virtual ICollection<Address>? Addresses { get; private set; }
         public virtual ICollection<ProductReview>? ProductReviews { get; private set; }
         public virtual ICollection<WishlistItem>? WishlistItems { get; private set; }
 
         // Logic
         public AppUser() { }
-        public AppUser(string email, string displayName, string profileImageUrl, string createdBy, 
-            )
+        public AppUser(string email, string displayName, string? profileImageUrl, string createdBy,
+            string? phoneNumber)
         {
+            Email = email;
+            UserName = email;
+            DisplayName = displayName;
+            PhoneNumber = phoneNumber;
+            CreatedBy = createdBy;
+            ProfileImageUrl = profileImageUrl;
             CreatedOn = DateTime.UtcNow;
             IsDeleted = false;
+            IsActive = true;
         }
 
-        public bool Update(string displayName, string profileImageUrl, string userModified)
+        public bool Update(string displayName, string? profileImageUrl,string userModified)
         {
             if (!string.IsNullOrEmpty(userModified))
             {
@@ -51,6 +64,10 @@ namespace Ecom.DAL.Entity
             }
             return false;
         }
+
+        // Used for user lock-out
+        public void Activate() => IsActive = true;
+        public void Deactivate() => IsActive = false;
 
     }
 }

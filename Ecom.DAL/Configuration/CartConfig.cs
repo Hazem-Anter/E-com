@@ -1,0 +1,20 @@
+﻿
+namespace Ecom.DAL.Configuration
+{
+    public class CartConfig : IEntityTypeConfiguration<Cart>
+    {
+        public void Configure(EntityTypeBuilder<Cart> builder)
+        {
+            builder.HasOne(c => c.AppUser)
+                .WithOne(u => u.Cart)
+                .HasForeignKey<Cart>(c => c.AppUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(c => c.CartItems)
+                .WithOne(ci => ci.Cart)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+        }
+    }
+}

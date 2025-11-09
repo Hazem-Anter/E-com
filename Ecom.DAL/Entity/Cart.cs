@@ -1,46 +1,43 @@
 ﻿
 namespace Ecom.DAL.Entity
 {
-    public class WishlistItem
+    public class Cart
     {
         [Key]
         public int Id { get; private set; }
         public string? CreatedBy { get; private set; }
         public DateTime CreatedOn { get; private set; }
-        public DateTime? DeletedOn { get; private set; }
-        public string? DeletedBy { get; private set; }
         public DateTime? UpdatedOn { get; private set; }
         public string? UpdatedBy { get; private set; }
         public bool IsDeleted { get; private set; }
+
+        // Computed properies (Not mapped to the database)
+        [NotMapped]
+        public decimal TotalAmount => CartItems?.Where(i => !i.IsDeleted)
+            .Sum(i => i.UnitPrice * i.Quantity) ?? 0;
 
         // Foriegn Keys
         [ForeignKey("AppUser")]
         public string? AppUserId { get; private set; }
 
-        [ForeignKey("Product")]
-        public int ProductId { get; private set; }
-
         // Navigation Properties
         public virtual AppUser? AppUser { get; private set; }
-        public virtual Product? Product { get; private set; }
+        public virtual ICollection<CartItem>? CartItems { get; private set; }
 
         // Logic
-        public WishlistItem() { }
-        public WishlistItem(string appUserId, int productId, string createdBy)
+        public Cart() { }
+        public Cart(string appUserId, string createdBy)
         {
             AppUserId = appUserId;
-            ProductId = productId;
             CreatedBy = createdBy;
             CreatedOn = DateTime.UtcNow;
             IsDeleted = false;
         }
 
-        public bool Update(string appUserId, int productId, string userModified)
+        public bool Update(string userModified)
         {
             if (!string.IsNullOrEmpty(userModified))
             {
-                AppUserId = appUserId;
-                ProductId = productId;
                 UpdatedOn = DateTime.UtcNow;
                 UpdatedBy = userModified;
                 return true;
@@ -52,8 +49,8 @@ namespace Ecom.DAL.Entity
             if (!string.IsNullOrEmpty(userModified))
             {
                 IsDeleted = !IsDeleted;
-                DeletedOn = DateTime.UtcNow;
-                DeletedBy = userModified;
+                UpdatedBy = userModified;
+                UpdatedOn = DateTime.UtcNow;
                 return true;
             }
             return false;

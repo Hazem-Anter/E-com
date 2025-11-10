@@ -20,7 +20,7 @@ namespace Ecom.DAL.Entity
 
         // Logic
         public Category() { }
-        public Category(string name, string imageUrl, string createdBy)
+        public Category(string name, string? imageUrl, string createdBy)
         {
             Name = name;
             ImageUrl = imageUrl;
@@ -29,7 +29,7 @@ namespace Ecom.DAL.Entity
             IsDeleted = false;
         }
 
-        public bool Update(string name, string imageUrl, string userModified)
+        public bool Update(string name, string? imageUrl, string userModified)
         {
             if (!string.IsNullOrEmpty(userModified))
             {

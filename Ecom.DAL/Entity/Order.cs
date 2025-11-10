@@ -9,6 +9,7 @@ namespace Ecom.DAL.Entity
         public OrderStatus Status { get; private set; } // Enum
         public decimal TotalAmount { get; private set; }
         public string? ShippingAddress { get; private set; }
+        public string? TrackingNumber { get; private set; }
         public string? CreatedBy { get; private set; }
         public DateTime CreatedOn { get; private set; }
         public DateTime? UpdatedOn { get; private set; }
@@ -18,34 +19,41 @@ namespace Ecom.DAL.Entity
         // Foriegn Keys
         [ForeignKey("AppUser")]
         public string? AppUserId { get; private set; }
+        [ForeignKey("Payment")]
+        public int? PaymentId { get; private set; }
 
         // Navigation Properties
         public virtual AppUser? AppUser { get; private set; }
+        public virtual Payment? Payment { get; private set; }
         public virtual ICollection<OrderItem>? OrderItems { get; private set; }
 
         // Logic
         public Order() { }
 
-        public Order(string appUserId, DateTime deliveryDate, string shippingAddress, OrderStatus orderStatus,
-            string createdBy)
+        public Order(string appUserId, DateTime deliveryDate, string shippingAddress,string createdBy,
+            string trackingNumber, int paymentId)
         {
             AppUserId = appUserId;
-            Status = orderStatus;
+            Status = OrderStatus.Pending;
             ShippingAddress = shippingAddress;
             DeliveryDate = deliveryDate;
             CreatedBy = createdBy;
             CreatedOn = DateTime.UtcNow;
             IsDeleted = false;
+            TrackingNumber = trackingNumber;
+            PaymentId = paymentId;
             OrderItems = new List<OrderItem>();
         }
 
-        public bool Update(OrderStatus orderStatus, string userModified)
+        public bool Update(OrderStatus orderStatus, string userModified, string trackingNumber, int paymentId)
         {
             if (!string.IsNullOrEmpty(userModified))
             {
                 Status = orderStatus;
                 UpdatedBy = userModified;
                 UpdatedOn = DateTime.UtcNow;
+                TrackingNumber = trackingNumber;
+                PaymentId = paymentId;
                 return true;
             }
             return false;

@@ -86,5 +86,35 @@ namespace Ecom.DAL.Entity
             return false;
         }
 
+        public void UpdateRating(decimal newAverageRating)
+        {
+            if (newAverageRating >= 0 && newAverageRating <= 5)
+            {
+                Rating = newAverageRating;
+            }
+        }
+
+        // This method tries to remove stock and returns true/false on success.
+        // This prevents overselling.
+        public bool TryRemoveStock(int quantityToDecrease)
+        {
+            if (quantityToDecrease <= 0) return false; // Can't remove 0 or less
+            if (Stock < quantityToDecrease)
+            {
+                return false; // Not enough stock!
+            }
+
+            Stock -= quantityToDecrease;
+            return true;
+        }
+
+        // This method adds to the sold quantity.
+        public void AddToQuantitySold(int quantitySold)
+        {
+            if (quantitySold > 0)
+            {
+                QuantitySold += quantitySold;
+            }
+        }
     }
 }

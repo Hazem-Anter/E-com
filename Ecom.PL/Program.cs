@@ -28,7 +28,7 @@ namespace Ecom.PL
 
             // Add Modular DAL and BLL Services
             builder.Services.AddBusinessInDAL();
-            builder.Services.AddBusinessInBLL();
+            builder.Services.AddBusinessInBLL(builder.Configuration);
 
             // Add CORS Policy
             var allowedOrigins = builder.Configuration.GetValue<string>("AllowedOrigins")!.Split(",");

@@ -66,7 +66,7 @@ namespace Ecom.BLL.Service.Implementation
                 var authResponse = new AuthResponseVM // Create AuthresponseVM
                 {
                     User = userVM,
-                    Token = token,
+                    Token = token.Result,
                     TokenExpiration = DateTime.Now.AddDays(7)
                 };
                 return new ResponseResult<AuthResponseVM>(authResponse, null, true);
@@ -103,7 +103,7 @@ namespace Ecom.BLL.Service.Implementation
                 var authResponse = new AuthResponseVM // Create AuthresponseVM
                 {
                     User = userVM,
-                    Token = token,
+                    Token = token.Result,
                     TokenExpiration = DateTime.Now.AddDays(7)
                 };
                 return new ResponseResult<AuthResponseVM>(authResponse, null, true);

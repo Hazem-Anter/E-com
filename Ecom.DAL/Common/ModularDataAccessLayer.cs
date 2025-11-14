@@ -34,19 +34,7 @@ namespace Ecom.DAL.Common
                 //.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
 
 
-            // Add Identity service with cookie, later will be changed for JWT
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-                options =>
-                {
-                    options.LoginPath = new PathString("/Account/Login");
-                    options.AccessDeniedPath = new PathString("/Account/Login");
-
-                    // Cookie settings, added for security
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                });
+            
 
             services.AddScoped<IProductImageUrlRepo, ProductImageUrlRepo>();
             services.AddScoped<IBrandRepo, BrandRepo>();

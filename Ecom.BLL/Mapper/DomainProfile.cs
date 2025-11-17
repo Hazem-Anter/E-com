@@ -1,4 +1,7 @@
 ﻿
+using Ecom.BLL.ModelVM.Order;
+using Ecom.BLL.ModelVM.OrderItem;
+
 namespace Ecom.BLL.Mapper
 {
     public class DomainProfile : Profile
@@ -38,7 +41,23 @@ namespace Ecom.BLL.Mapper
                 .ForMember(dest => dest.Name, opt => opt.Ignore())
                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore())
                 .ReverseMap();
-        
+
+            // Order And OrderItem
+            CreateMap<Order, GetOrderVM>()
+            .ForMember(dest => dest.CustomerName,
+                       opt => opt.MapFrom(src => src.AppUser.UserName))
+            .ForMember(dest => dest.Items,
+                       opt => opt.MapFrom(src => src.OrderItems));
+
+            CreateMap<OrderItem, GetOrderItemVM>();
+
+            CreateMap<CreateOrderVM, Order>();
+
+            CreateMap<CreateOrderItemVM, OrderItem>();
+
+            CreateMap<UpdateOrderVM, Order>()
+           .ForAllMembers(opt => opt.Ignore());
+
         }
 
     }

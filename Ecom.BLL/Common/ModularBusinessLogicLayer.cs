@@ -10,6 +10,7 @@ namespace Ecom.BLL.Common
 
             services.AddScoped<IProductImageUrlService, ProductImageUrlService>();
             services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
     }

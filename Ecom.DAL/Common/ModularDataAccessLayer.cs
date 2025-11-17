@@ -52,6 +52,8 @@ namespace Ecom.DAL.Common
             //Dependency injection s oWhen a controller or service asks for an IProductImageUrlRepo,
             // give them a new ProductImageUrlRepo instance for each HTTP request
             services.AddScoped<IBrandRepo, BrandRepo>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
+
 
             return services;
         }

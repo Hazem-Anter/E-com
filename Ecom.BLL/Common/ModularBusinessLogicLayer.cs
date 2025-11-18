@@ -39,6 +39,11 @@ namespace Ecom.BLL.Common
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IRoleService, RoleService>();
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<ICartService, CartService>();
+
             return services;
         }
     }

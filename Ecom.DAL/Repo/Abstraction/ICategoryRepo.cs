@@ -15,6 +15,5 @@ namespace Ecom.DAL.Repo.Abstraction
 
         // helpers
         Task<bool> ExistsByNameAsync(string name);
-        Task<bool> DeleteAsync(int id);
     }
 }

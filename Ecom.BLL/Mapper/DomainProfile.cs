@@ -1,5 +1,6 @@
 ﻿
 using Ecom.BLL.ModelVM.Cart;
+using Ecom.BLL.ModelVM.CartItem;
 using Ecom.BLL.ModelVM.Category;
 using Ecom.DAL.Entity;
 
@@ -14,8 +15,9 @@ namespace Ecom.BLL.Mapper
             // ----------------------------------------
             // ## Category Mappings
             // ----------------------------------------
-            // Category <-> CreateCategoryVM
-            CreateMap<Category, AddCategoryVM>().ReverseMap();
+            // CreateCategoryVM -> Category 
+            CreateMap<AddCategoryVM, Category>()
+                .ConstructUsing(vm => new Category(vm.Name!, vm.ImageUrl!, vm.CreatedBy!));
             // Category <-> UpdateCategoryVM
             CreateMap<Category, UpdateCategoryVM>().ReverseMap();
             // Category <-> GetCategoryVM
@@ -35,12 +37,34 @@ namespace Ecom.BLL.Mapper
                 .ForMember(dest => dest.CartItems, opt => opt.MapFrom(src => src.CartItems));
             // Cart <-> UpdateCartVM
             CreateMap<Cart, UpdateCartVM>().ReverseMap();
-            // Cart <-> AddCartVM
-            CreateMap<Cart, AddCartVM>().ReverseMap();
+            // AddCartVM -> Cart
+            CreateMap<AddCartVM, Cart>()
+                .ConstructUsing(vm => new Cart(vm.AppUserId!, vm.CreatedBy!));
             // Cart <-> DeleteCartVM
             CreateMap<Cart, DeleteCartVM>().ReverseMap();
             // ----------------------------------------
             // ## End Cart Mappings
+            // ----------------------------------------
+
+            // ----------------------------------------
+            // ## Cart Item Mappings
+            // ----------------------------------------
+            // Cart <-> GetCartItemVM
+            CreateMap<CartItem, GetCartItemVM>().ReverseMap();
+            // Cart <-> UpdateCartItemVM
+            CreateMap<CartItem, UpdateCartItemVM>().ReverseMap();
+            // AddCartItemVM -> Cart 
+            CreateMap<AddCartItemVM, CartItem>()
+                .ConstructUsing(vm => new CartItem(vm.ProductId, 
+                                                   vm.CartId, 
+                                                   vm.Quantity, 
+                                                   vm.UnitPrice, 
+                                                   vm.CreatedBy));
+
+            // Cart <-> DeleteCartItemVM
+            CreateMap<CartItem, DeleteCartItemVM>().ReverseMap();
+            // ----------------------------------------
+            // ## End Cart Item Mappings
             // ----------------------------------------
 
 

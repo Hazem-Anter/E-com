@@ -3,7 +3,6 @@ namespace Ecom.BLL.Service.Abstraction
 {
     public interface ICartService
     {
-        // ICartService
         Task<ResponseResult<GetCartVM>> GetByUserIdAsync(string UserId);
         Task<ResponseResult<GetCartVM>> GetByIdAsync(int id);
         Task<ResponseResult<bool>> AddAsync(AddCartVM model);

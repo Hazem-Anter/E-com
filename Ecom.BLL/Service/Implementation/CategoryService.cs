@@ -166,6 +166,11 @@ namespace Ecom.BLL.Service.Implementation
             }
         }
 
+        public Task<ResponseResult<bool>> ToggleDeleteAsync(int id, string userModified)
+        {
+            throw new NotImplementedException();
+        }
+
         // Update Category
         public async Task<ResponseResult<bool>> UpdateAsync(UpdateCategoryVM model)
         {

@@ -89,7 +89,7 @@ namespace Ecom.DAL.Repo.Implementation
             {
                 // Include Products to avoid FK constraint issues
                 var category = await _db.Categories
-                                        .Include(c => c.Products)
+                                        //.Include(c => c.Products)
                                         .FirstOrDefaultAsync(c => c.Id == id);
                 if(category != null)
                 {
@@ -173,6 +173,11 @@ namespace Ecom.DAL.Repo.Implementation
 
                 throw;
             }
+        }
+
+        public Task<bool> DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

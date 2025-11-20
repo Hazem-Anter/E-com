@@ -21,8 +21,7 @@ namespace Ecom.BLL.Mapper
             // Category <-> UpdateCategoryVM
             CreateMap<Category, UpdateCategoryVM>().ReverseMap();
             // Category <-> GetCategoryVM
-            CreateMap<Category, GetCategoryVM>().ReverseMap()
-                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+            CreateMap<Category, GetCategoryVM>().ReverseMap();
             // Category <-> DeleteCategoryVM
             CreateMap<Category, DeleteCategoryVM>().ReverseMap();
             // ----------------------------------------
@@ -122,7 +121,10 @@ namespace Ecom.BLL.Mapper
                 .ForMember(dest => dest.Email, opt => opt.Ignore())
                 .ForMember(dest => dest.UserName, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                
+
+            // Role Mappings
+            CreateMap<IdentityRole, RoleVM>().ReverseMap();
+
 
         }
 

@@ -37,6 +37,9 @@ namespace Ecom.DAL.Common
 
             services.AddScoped<IProductImageUrlRepo, ProductImageUrlRepo>();
             services.AddScoped<IBrandRepo, BrandRepo>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
+
+
             services.AddScoped<IAccountRepo, AccountRepo>();
 
             services.AddScoped<IAddressRepo, AddressRepo>();

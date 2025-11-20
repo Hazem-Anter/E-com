@@ -47,6 +47,7 @@ namespace Ecom.BLL.Common
             services.AddScoped<ICartService, CartService>();
             //services.AddScoped<IPaymentService, PaymentService>();
 
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
     }

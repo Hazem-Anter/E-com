@@ -34,9 +34,9 @@ namespace Ecom.PL.Controllers
             return NoContent();
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         
-        public async Task<IActionResult> Create([FromBody] CreateBrandVM model)
+        public async Task<IActionResult> Create([FromForm] CreateBrandVM model)
         {
             if (ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace Ecom.PL.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateBrandVM model)
+        public async Task<IActionResult> Update(int id, [FromForm] UpdateBrandVM model)
         {
             if (id != model.Id)
             {

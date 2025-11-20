@@ -1,4 +1,15 @@
 ﻿
+using Ecom.BLL.ModelVM.Cart;
+using Ecom.BLL.ModelVM.CartItem;
+using Ecom.BLL.ModelVM.Category;
+using Ecom.DAL.Entity;
+
+using Microsoft.Data.SqlClient;
+
+using Ecom.BLL.ModelVM.Order;
+using Ecom.BLL.ModelVM.OrderItem;
+using Ecom.BLL.ModelVM.CartItem;
+
 namespace Ecom.BLL.Mapper
 {
     public class DomainProfile : Profile
@@ -163,6 +174,33 @@ namespace Ecom.BLL.Mapper
 
             // Role Mappings
             CreateMap<IdentityRole, RoleVM>().ReverseMap();
+
+
+
+            // Order And OrderItem
+            CreateMap<Order, GetOrderVM>()
+            .ForMember(dest => dest.CustomerName,
+                       opt => opt.MapFrom(src => src.AppUser.UserName))
+            .ForMember(dest => dest.Items,
+                       opt => opt.MapFrom(src => src.OrderItems));
+
+            CreateMap<OrderItem, GetOrderItemVM>();
+
+            CreateMap<CreateOrderVM, Order>();
+
+            CreateMap<CreateOrderItemVM, OrderItem>();
+
+            CreateMap<UpdateOrderVM, Order>()
+           .ForAllMembers(opt => opt.Ignore());
+
+            // for mapping GetCartItemVM to GetOrderItemVM
+            CreateMap<GetCartItemVM, OrderItem>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.ProductTitle, opt => opt.MapFrom(src => src.ProductName))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice))
+            .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice));
+
 
             // Payment Mappings
             CreateMap<CreatePaymentVM, Payment>()

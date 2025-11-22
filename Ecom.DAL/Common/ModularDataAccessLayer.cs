@@ -1,4 +1,10 @@
-﻿
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using Ecom.DAL.Entity;
+using Ecom.DAL.Data;
+using Ecom.DAL.Repository; 
+// Note: Ensure you have the correct using statements for your specific Repo classes
+
 namespace Ecom.DAL.Common
 {
     public static class ModularDataAccessLayer
@@ -30,13 +36,17 @@ namespace Ecom.DAL.Common
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders() // Add all default token providers
                 .AddSignInManager<SignInManager<AppUser>>();
-                //.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
-
-
-            
 
             services.AddScoped<IProductImageUrlRepo, ProductImageUrlRepo>();
+            services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddScoped<IProductReviewRepo, ProductReviewRepo>();
+
+            // Dependency injection: When a controller or service asks for an IBrandRepo,
+            // give them a new BrandRepo instance for each HTTP request
             services.AddScoped<IBrandRepo, BrandRepo>();
+            
+            services.AddScoped<IOrderRepo, OrderRepo>();
+
             services.AddScoped<IAccountRepo, AccountRepo>();
 
             services.AddScoped<IAddressRepo, AddressRepo>();
@@ -45,6 +55,7 @@ namespace Ecom.DAL.Common
             services.AddScoped<ICartItemRepo, CartItemRepo>();
             services.AddScoped<ICartRepo, CartRepo>();
             services.AddScoped<IPaymentRepo, PaymentRepo>();
+            
             return services;
         }
     }

@@ -1,4 +1,12 @@
-﻿
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Ecom.BLL.Mapper;
+using Ecom.BLL.Services; 
+// Note: Ensure you have the correct using statements for your specific Service classes
+
 namespace Ecom.BLL.Common
 {
     public static class ModularBusinessLogicLayer
@@ -8,34 +16,37 @@ namespace Ecom.BLL.Common
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
             // JWT Configuration
-            var jwtSection = configuration.GetSection("JWT"); // Getting JWT section from appsettings.json
-            var key = Encoding.UTF8.GetBytes(jwtSection["Key"]!); // Encoding the secret key
+            var jwtSection = configuration.GetSection("JWT");
+            var key = Encoding.UTF8.GetBytes(jwtSection["Key"]!);
 
-            // Adding Authentication with JWT Bearer
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtSection["Issuer"],
-                        ValidAudience = jwtSection["Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ClockSkew = TimeSpan.FromSeconds(5)
-                    };
-                });
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSection["Issuer"],
+                    ValidAudience = jwtSection["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.FromSeconds(5)
+                };
+            });
 
-            services.AddAuthorization(); // Adding Authorization services
+            services.AddAuthorization();
 
+            // Merged Services (NO DUPLICATES)
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IWishlistItemService, WishlistItemService>();
+
+            services.AddScoped<IProductImageUrlService, ProductImageUrlService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IAccountService, AccountService>();
@@ -45,7 +56,13 @@ namespace Ecom.BLL.Common
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICartItemService, CartItemService>();
             services.AddScoped<ICartService, CartService>();
-            //services.AddScoped<IPaymentService, PaymentService>();
+            
+            // services.AddScoped<IPaymentService, PaymentService>();
+
+            // Resolved Conflict: Included both Order and Review services
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IProductReviewService, ProductReviewService>();
+            services.AddScoped<IRatingCalculatorService, RatingCalculatorService>();
 
             return services;
         }

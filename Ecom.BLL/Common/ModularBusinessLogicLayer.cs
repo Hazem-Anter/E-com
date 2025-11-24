@@ -1,6 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+using Ecom.BLL.Mapper;
+using FaceRecognitionDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ecom.BLL.Mapper;
@@ -39,6 +41,28 @@ namespace Ecom.BLL.Common
                 };
             });
 
+            // Face Recognition Service
+            // Ensure that FaceModelsPath is set in configuration
+            // Example: "FaceModelsPath": "path/to/face/models"
+            // This path should point to the directory containing the face recognition models
+            services.AddSingleton<FaceRecognition>(provider =>
+            {
+                var config = provider.GetRequiredService<IConfiguration>();
+
+                // base dir = bin\Debug\net8.0
+                var baseDir = AppContext.BaseDirectory;
+                var relative = config["FaceModelsPath"] ?? "Models/FaceModels";
+                var modelsPath = Path.Combine(baseDir, relative);
+
+                if (!Directory.Exists(modelsPath))
+                {
+                    throw new DirectoryNotFoundException($"FaceModelsPath not found: {modelsPath}");
+                }
+
+                return FaceRecognition.Create(modelsPath);
+            });
+
+
             services.AddAuthorization();
 
             // Merged Services (NO DUPLICATES)
@@ -63,6 +87,8 @@ namespace Ecom.BLL.Common
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IProductReviewService, ProductReviewService>();
             services.AddScoped<IRatingCalculatorService, RatingCalculatorService>();
+
+            services.AddScoped<IFaceIdService, FaceIdService>();
 
             services.AddScoped<IProductReviewService, ProductReviewService>();
             services.AddScoped<IRatingCalculatorService, RatingCalculatorService>();

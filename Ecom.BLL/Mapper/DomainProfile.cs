@@ -1,6 +1,8 @@
+using AutoMapper; 
 using Ecom.BLL.ModelVM.Cart;
 using Ecom.BLL.ModelVM.CartItem;
 using Ecom.BLL.ModelVM.Category;
+using Ecom.BLL.ModelVM.FaceId;
 using Ecom.DAL.Entity;
 using Microsoft.AspNetCore.Identity;
 using Ecom.BLL.ModelVM.Product;
@@ -222,6 +224,41 @@ namespace Ecom.BLL.Mapper
             // ----------------------------------------
             CreateMap<CreatePaymentVM, Payment>()
                 .ConstructUsing(vm => new Payment(vm.OrderId, vm.TotalAmount, vm.PaymentMethod, null, vm.CreatedBy!));
+            // ----------------------------------------
+
+
+            // ----------------------------------------
+            // ## FaceId Mappings
+            // ----------------------------------------
+            // RegisterFaceIdVM -> FaceId
+            /*CreateMap<RegisterFaceIdVM, FaceId>()
+            .ConstructUsing(src => new FaceId(
+                                    src.Encoding ?? Array.Empty<double>(),
+                                    src.AppUserId,
+                                    src.CreatedBy
+                            ));
+
+            CreateMap<UpdateFaceIdVM, FaceId>()
+            .ForMember(dest => dest.Encoding,
+                       opt => opt.MapFrom(src => src.Encoding != null
+                                                 ? FaceId.DoubleArrayToBytes(src.Encoding)
+                                                 : Array.Empty<byte>()));*/
+
+            CreateMap<RegisterFaceIdVM, FaceId>()
+                    .ForMember(dest => dest.Encoding,
+                        opt => opt.MapFrom(src => FaceId.DoubleArrayToBytes(src.Encoding)))
+                    .ForMember(dest => dest.AppUserId,
+                        opt => opt.MapFrom(src => src.AppUserId))
+                    .ForMember(dest => dest.CreatedBy,
+                        opt => opt.MapFrom(src => src.CreatedBy));
+
+            CreateMap<UpdateFaceIdVM, FaceId>()
+                .ForMember(dest => dest.Encoding,
+                    opt => opt.MapFrom(src => FaceId.DoubleArrayToBytes(src.Encoding)))
+                .ForMember(dest => dest.AppUserId,
+                    opt => opt.MapFrom(src => src.AppUserId))
+                .ForMember(dest => dest.UpdatedBy,
+                    opt => opt.MapFrom(src => src.UpdatedBy));
             // ----------------------------------------
         }
     }

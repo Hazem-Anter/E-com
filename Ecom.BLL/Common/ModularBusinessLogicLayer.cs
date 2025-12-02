@@ -109,6 +109,8 @@ namespace Ecom.BLL.Common
             services.Configure<EmailConfig>(configuration.GetSection("SendGrid"));
             services.AddScoped<IEmailService, EmailService>();
 
+            services.AddScoped<ICartReminderService, CartReminderService>();
+
             return services;
         }
     }

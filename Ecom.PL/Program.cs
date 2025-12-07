@@ -1,11 +1,5 @@
-
-using Ecom.BLL.Service.Implementation.Chatbot;
-using Ecom.DAL.Entity;
-using Ecom.DAL.Seeding;
 using Hangfire;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
-using System.Net;
 using System.Text.Json.Serialization;
 using Stripe;
 
@@ -102,8 +96,7 @@ namespace Ecom.PL
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // This tells .NET: "If a request comes in starting with /Files, 
-            // look inside the physical 'Files' folder in the project root."
+            // Exposing the Files folder for the front-end
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
